@@ -296,3 +296,176 @@ let d = {
 #### if-else
 
 No parentheses surrounding the boolean expression. Also same type of value needs to be returned by every if-else branch.
+
+#### loop
+
+Loop is a keyword which loops infinitely over a code block. The way to break out of the loop is to use `break` command and to skip an iteration use `continue`
+
+_Note to self: I think using this is not a great idea as the program can run into a infinite loop issue if not used correctly._
+
+Ex.
+
+```rust
+fn main() {
+    let mut count = 0u32;
+    loop {
+        if count%2 == 0 {
+            println!("Even number: {}", count);
+        } else if count > 100 {
+            break;
+        }
+        count+=1;
+    }
+}
+```
+
+##### **Nested loops**
+
+A loop can be nested and to break / continue out of a specific loop one needs to label the loops and provide it as an argument to break / continue.
+
+```rust
+fn main() {
+    'outer: loop {
+        println!("Entered the outer loop");
+        'inner: loop {
+            println!("Entered the inner loop");
+            break 'outer;
+        }
+        println!("This point will never be reached");
+    }
+    println!("Exited the outer loop");
+}
+```
+
+##### **Returning values from a loop**
+
+To return values for a loop, just pass it to break;
+
+```rust
+fn main() {
+    let mut count = 0u32;
+    let finalval = loop {
+        if count > 100 {
+            break count;
+        }
+        count+=1;
+    };
+    println!("{}", finalval);
+}
+```
+
+#### **for in**
+
+The for in loop is used to iterate over values using an iterator. To easily create an iterator use the .. syntax. So to create an iterator from 1 to 100 use `1..100`
+
+> The lower bound is inclusive whereas the upper bound is excluded. To include the upper bound use `1..=100`
+
+_Iterator in for in need to learn iterator trait_
+
+#### **match**
+
+Match is like a switch case but a case can be single value or many values or a range. the `default` case is represented as `_` case. All possible cases need to be handled else the compiler will throw a compile time error.
+
+```rust
+fn main() {
+    let number = 13;
+    match number {
+        1 => println!("One!"),
+        2 | 3 | 5 | 7 | 11 => println!("This is a prime"),
+        _ => println!("Ain't special"),
+    }
+}
+```
+
+Guards and Bindings
+
+Guards are conditions that if full filled that particular branch of match executes.
+
+Bindings is mechanism with which we can access variables which aren't declared.
+
+```rust
+fn main() {
+    match num() { // n is bound to the result of num
+        n@ 1 => println!("One!"),
+        n@ 2 | n@ 3 | n@ 5 | n@ 7 | n@ 11 => println!("This is a prime: {}",n),
+        n => println!("Ain't special"),
+    };
+    let a = (2,3);
+    matchpair(a);
+}
+
+fn matchpair(tup:(i32,i32)){
+    match tup {
+        (a,b) if a + b == 5 => println!("Sum is 5"),
+        _ => println!("Sum not 5")
+    };
+}
+
+fn num() -> u32 {
+    45
+}
+```
+
+#### if let, while let
+
+_WIP_
+
+### **Methods**
+
+Methods are functions attached an object. Methods are defined inside of a `impl` block.
+
+Methods which don't have self as an argument are static methods and can be used directly using `::`
+
+Methods that take self as an argument are instance methods and accessed using a `.`
+
+Ex.
+
+```rust
+struct Cat {
+    teeth:u32,
+    age: u32,
+}
+
+impl Cat {
+    fn meow() {
+        println!("Meow");
+    }
+
+    fn sayName(&self) {
+        println!("Number of teeth are : {}", self.teeth);
+    }
+
+    fn addAge(&mut self) {
+        self.age += 1;
+    }
+}
+
+fn main() {
+   let cat = Cat {
+       teeth:32,
+       age:2,
+   };
+   Cat::meow();
+   cat.sayName();
+   cat.addAge(); // This will throw an error as cat isn't marked mutable.
+}
+```
+
+### **Closures**
+
+Closures are functions and are also called lambda functions or lambdas.
+
+These functions have a different syntax. The type of input variables need not be specified as well as the return type. Those are inferred in these functions. Also if the function is just one expression long then no need to enclose it in `{}`. Closures are anonymous and can be returned in a variable and called using the name of that variable.
+
+Ex.
+
+```rust
+fn main(){
+    // One expression long closure, with no return and input type defined and no {}
+    let some_closure = |x|  x%2==0;
+    let another_closure = |y: i32| -> i32 {y + 10};
+    let z = 20;
+    println!("Some Closure: {}", some_closure(z));
+    println!("Another Closure: {}", another_closure(z));
+}
+```
