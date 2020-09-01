@@ -294,8 +294,6 @@ There are 3 levels
 
 ## Addons
 
-<br>
-
 ### Controls
 
 Controls addon is a default addon which comes out of the box. It is way to manipulate args. Depending upon the arg type control type is inferred. This can be changed using `argTypes`
